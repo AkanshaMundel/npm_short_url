@@ -23,13 +23,28 @@ async function handleuserLogin
     if(!user) return res.render("login", {
         error:"Invaild user or password"
     });
-    const sessionId = uuidv4()
-        setUser(sessionId, user)
+    // const sessionId = uuidv4()
+    const token = setUser(user);
+    return res.json({token}) //now we passing token in response 
+    //this is way to send in cookies 
+    // res.cookie("uid", token, 
+    // // {
+    // //     domain:"www.google.com" then only creae its domain sa,
+    // // }
+    // // {
+    // //     expires:new Date(Date.now()+9000000)
+    // // }
+    // )
+
+
+
+        // setUser(sessionId, user)
         //now i want to set as cookies 
-        res.cookie("uid", sessionId)
-        return res.redirect("/");
+        // res.cookie("uid", sessionId)
+        // return res.redirect("/");
     // return res.render("home")// as we are working with ejs so render using or elsejson 
     
     
 }
 module.exports = {handleuserSignup, handleuserLogin}
+
