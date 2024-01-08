@@ -19,7 +19,7 @@ const path   = require('path')
 const staticRoute = require('./routes/staticRouter')
 const urlRoute = require("./routes/url")
 const userRoute = require("./routes/user")
-const {restrictToLoggedinUserOnly, checkAuth} = require("./middlewares/auth")
+const { checkForAuthentication, restrictTo} = require("./middlewares/auth")
 
 
 
@@ -41,12 +41,13 @@ app.set("views", path.resolve("./views")) //saying my all views arae locareee
 app.use(express.json()) //mandatory to use in above the route  json form 
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser());
+app.use(checkForAuthentication)
 
 //now i want to access the /url route to get urs urls shorten u must have logined in 
 
-app.use("/url",restrictToLoggedinUserOnly, urlRoute)
+app.use("/url", restrictTo(['NORMAL','ADMIN']),urlRoute) //only restrict to normal user 
 app.use("/user", userRoute)
-app.use('/',checkAuth, staticRoute)
+app.use('/',staticRoute)
 
 app.get("/url/:shortid", async (req, res) => {
     const shortId = req.params.shortid;

@@ -23,11 +23,15 @@ async function handleuserLogin
     if(!user) return res.render("login", {
         error:"Invaild user or password"
     });
-    const sessionId = uuidv4()
-        setUser(sessionId, user)
-        //now i want to set as cookies 
-        res.cookie("uid", sessionId)
-        return res.redirect("/");
+    // const sessionId = uuidv4()
+    //     setUser(sessionId, user)
+    //     //now i want to set as cookies 
+    //     res.cookie("uid", sessionId)
+    //     return res.redirect("/");
+    const token = setUser(user)
+    res.cookie("token", token)
+    // return res.json({token})
+    return  res.redirect("/");
     // return res.render("home")// as we are working with ejs so render using or elsejson 
     
     

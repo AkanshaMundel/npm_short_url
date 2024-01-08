@@ -1,11 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const URL = require("../models/urls")
+const URL = require("../models/urls");
+const { restrictTo } = require("../middlewares/auth");
 
-router.get('/', async(req, res)=>{
+//inline middleware 
+router.get("/admin/urls",restrictTo(['ADMIN']),async(req, res)=>{
+   
+    const allUrls = await URL.find({}) //searching user id only link in urls schema 
+    return res.render("home", {
+        urls:allUrls
+    })} )
+
+
+router.get('/',restrictTo(['NORMAL', 'ADMIN']) ,async(req, res)=>{
     //till now we are fetching all url but want only now login user 
     // const allUrls = await URL.find({})
-    if(!req.user) return res.redirect("/login");
+    // if(!req.user) return res.redirect("/login");
     const allUrls = await URL.find({createdBy: req.user._id}) //searching user id only link in urls schema 
     return res.render("home", {
         urls:allUrls
